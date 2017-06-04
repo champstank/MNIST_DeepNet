@@ -13,7 +13,7 @@ DeepNet implementing Keras with Theano backend applying GridSearch on MNIST data
 Starting with a baseline script that produced a score of 0.983.
 
 ```python
-'''Trains a simple convnet on the MNIST dataset for ONLY digits 3 and 8.
+'''Trains a simple convnet on the MNIST dataset for ONLY digits 2 and 7.
 Gets to 98.25% test accuracy after 12 epochs
 (there is still a lot of margin for parameter tuning).
 4 seconds per epoch on a 2 GHz Intel Core i5.
@@ -41,7 +41,7 @@ img_rows, img_cols = 28, 28
 # the data, shuffled and split between train and test sets
 (x_train, y_train), (x_test, y_test) = mnist.load_data()
 
-#Only look at 3s and 8s
+#Only look at 2's and 7's
 train_picks = np.logical_or(y_train==2,y_train==7)
 test_picks = np.logical_or(y_test==2,y_test==7)
 
@@ -102,7 +102,7 @@ print('Test accuracy:', score[1])
 Notice we loaded **model.fit()** into a variable.  This is so we can plot the performace metrics easily.
 
 
-We can visualize the performace of the model with accuracy loss and accuracy.
+We can visualize the performace of the model with accuracy loss and accuracy from our **history** variable.
 ```python
 # summarize history for accuracy
 plt.plot(history.history['acc'])
@@ -112,6 +112,7 @@ plt.ylabel('accuracy')
 plt.xlabel('epoch')
 plt.legend(['train', 'test'], loc='upper left')
 plt.show()
+
 # summarize history for loss
 plt.plot(history.history['loss'])
 plt.plot(history.history['val_loss'])
@@ -121,8 +122,6 @@ plt.xlabel('epoch')
 plt.legend(['train', 'test'], loc='upper left')
 plt.show()
 ```
-
-
 
 
 
