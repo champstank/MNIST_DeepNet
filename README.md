@@ -95,33 +95,18 @@ score = model.evaluate(x_test, y_test, verbose=0)
 print('Test loss:', score[0])
 print('Test accuracy:', score[1])
 ```
----
-**Test loss: 0.0500074749647** --
+**Test loss: 0.0500074749647**     
 **Test accuracy: 0.985922330097**
-
-Notice we loaded **model.fit()** into a variable.  This is so we can plot the performace metrics easily.
+---
+Notice we did 
+```python
+history = model.fit(x_train, y_train,batch_size=batch_size,epochs=epochs,verbose=1,validation_data=(x_test, y_test))
+```
+This is so we can plot the performace metrics easily.
 
 
 We can visualize the performace of the model with accuracy loss and accuracy from our **history** variable.
-```python
-# summarize history for accuracy
-plt.plot(history.history['acc'])
-plt.plot(history.history['val_acc'])
-plt.title('model accuracy')
-plt.ylabel('accuracy')
-plt.xlabel('epoch')
-plt.legend(['train', 'test'], loc='upper left')
-plt.show()
 
-# summarize history for loss
-plt.plot(history.history['loss'])
-plt.plot(history.history['val_loss'])
-plt.title('model loss')
-plt.ylabel('loss')
-plt.xlabel('epoch')
-plt.legend(['train', 'test'], loc='upper left')
-plt.show()
-```
 
 
 
