@@ -96,8 +96,9 @@ print('Test loss:', score[0])
 print('Test accuracy:', score[1])
 ```
 ---
-*Test loss: 0.0500074749647* 
-*Test accuracy: 0.985922330097*
+Test loss: 0.0500074749647 --
+
+Test accuracy: 0.985922330097
 
 Notice we laoded **model.fit()** into a variable.  This is so we can plot the performace metrics easily.
 
