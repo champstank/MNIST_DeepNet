@@ -16,7 +16,7 @@ Starting with a baseline script that produced a score of 0.983.
 
 First we import all the modules we will need.
 ```python
-'''Trains a simple convnet on the MNIST dataset for ONLY digits 2 and 7.
+'''Trains a simple convnet on the MNIST dataset for ONLY digits 3 and 8.
 Gets to 98.25% test accuracy after 12 epochs
 (there is still a lot of margin for parameter tuning).
 4 seconds per epoch on a 2 GHz Intel Core i5.
@@ -46,7 +46,7 @@ img_rows, img_cols = 28, 28
 # the data, shuffled and split between train and test sets
 (x_train, y_train), (x_test, y_test) = mnist.load_data()
 ```
-Here we find only the 2's and 7's.  Then convert the data into a workable type for the model.  This makes it more reasonable to train on a cpu.
+Here we find only the 3's and 8's.  Then convert the data into a workable type for the model.  This makes it more reasonable to train on a cpu.
 ```python
 #Only look at 2's and 7's
 train_picks = np.logical_or(y_train==2,y_train==7)
