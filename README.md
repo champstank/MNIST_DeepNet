@@ -111,9 +111,157 @@ score = model.evaluate(x_test, y_test, verbose=0)
 print('Test loss:', score[0])
 print('Test accuracy:', score[1])
 ```
-Test loss: 0.0500074749647    
+Test loss: 0.0500074749647   
 Test accuracy: 0.985922330097
 ---
+## Smoothing the workflow with build model function
+First thing to improve our script we build a function to initialize our Keras model.  This makes it easier to pass parameters from our future parameter tuning techniques.
+```python
+#build Keras model
+def create_model():
+    #create model
+    model = Sequential()
+    model.add(Conv2D(4, kernel_size=(3, 3),activation='relu',input_shape=input_shape))
+    model.add(Conv2D(8, (3, 3), activation='relu'))
+    model.add(MaxPooling2D(pool_size=(2, 2)))
+    model.add(Dropout(0.25))
+    model.add(Flatten())
+    model.add(Dense(16, activation='relu'))
+    model.add(Dropout(0.5))
+    model.add(Dense(2, activation='softmax'))
+    
+    #compile model
+    model.compile(loss=keras.losses.categorical_crossentropy,
+              optimizer=keras.optimizers.Adadelta(),
+              metrics=['accuracy'])
+    
+    return model
+```
+We can call this function with the following bit of code.
+```python
+model = KerasClassifier(build_fn=create_model)
+```
+##  Tuning parameters with GridSearchCV
+Next we started using **GridSearchCV** to find the optimal parameters for the model.  Since we are working with CPU's we approached this as a coarse pass with less paramters at once.  Meaning the model was not searched as exhaustively since it took to much time on the CPU's.  Everytime we ran it we narrowed the params we had already tuned and added new ones to search.  This approach ended up improving the score consistently above 0.993.
+
+A list of parameters we ended up tuning and a range of each were.
+```python
+#size of data to grab at a time
+batch_size = 128
+#loops on dataset
+epochs = 12
+#optimizers
+optimizer = ['SGD', 'RMSprop', 'Adagrad', 'Adadelta', 'Adam', 'Adamax', 'Nadam']
+#learning rate
+learn_rate = [0.001, 0.01, 0.1]
+#activation for first layer
+activation = ['softmax', 'softplus', 'softsign', 'relu', 'tanh', 'sigmoid', 'hard_sigmoid', 'linear']
+#initializer 
+init_mode = ['uniform', 'lecun_uniform', 'normal', 'zero', 'glorot_normal', 'glorot_uniform', 'he_normal', 'he_uniform']
+#weight
+weight_constraint = [1, 3, 5]
+#dropout percent
+dropout_rate = [0.25,0.5.9]
+# # of neurons
+neurons = [25,30,35]
+```
+Again, we narrowed these down, searching only two or three at a time.  The goal was to stay under a 1000 fits maximum at a time.  So to execute this approach we only provide the parameters we want to pass through the **param_grid** option of **GridSearchCV** as following.
+```python
+param_grid = dict(batch_size=batch_size, epochs=epochs, optimizer=optimizer, learn_rate=learn_rate, and so on.......)
+```
+What ever variables we pass through **GridSearchCV** we also need to pass them into the **create_model** function as such.
+```python
+def create_model(learn_rate=learn_rate, optimizer=optimizer, and so on.......):
+```
+Once we have found the value we want to use for the variable we can hardcode it into the model creation and don't have to pass it in.
+
+
+Next, to initialize and instantiate **GridSearchCV()** with the **Keras** model we do the following.
+```python
+grid_search = GridSearchCV(model, param_grid=param_grid, n_jobs=-1,verbose=1)
+```
+**n_jobs=-1** runs the job on all cores to speed it up and **verbose=1** prints out how many fits we will be doing.
+
+Then to run exhaustive **GridSearchCV** on parameters evaluate performance of different tunings we do
+```python
+grid = grid_search.fit(x_train,y_train)
+```
+Now that we have performed these steps we can pull out the best score and our best model with optimal parameter values.
+```python
+# #best score
+best_score = grid.best_score_
+# #best params
+best_params = grid.best_params_
+
+# #print out results
+print ('Grid Score = ' , best_score)
+print ('Grid Best Parameters = ' , best_params)
+```
+Grid Score =  0.994518530351    
+Grid Best Parameters =  {'dropout_rate': 0.25, 'learn_rate': 0.002, 'weight_constraint': 3, 'batch_size': 128, 'epochs': 12, 'neurons': 30, 'init_mode': 'lecun_uniform'}
+
+
+## Initializing best parameters in model creation
+Now that we know our best parameters we can code them directly into the **create_model** function.  Notice again we are not passing in any parameters into the model since we are no longer tuning parameters.
+```python
+def create_model():
+    #create model
+    model = Sequential()
+    model.add(Conv2D(4, kernel_size=(3, 3),activation='relu',input_shape=input_shape))
+    model.add(Conv2D(8, (3, 3), activation='relu'))
+    model.add(MaxPooling2D(pool_size=(2, 2)))
+    model.add(Dropout(0.25))
+    model.add(Flatten())
+    model.add(Dense(25, kernel_initializer='lecun_uniform', activation='linear', kernel_constraint=maxnorm(3))) 
+    model.add(Dropout(0.5))
+    model.add(Dense(2, kernel_initializer='lecun_uniform', activation='softmax'))
+    
+    #initialize optimizer
+    nadam = Nadam()
+    
+    #compile model
+    model.compile(loss=keras.losses.categorical_crossentropy,
+              optimizer=nadam,
+              metrics=['accuracy'])
+    
+    return model
+```
+
+## Vizualizing model performance
+An easy way to evaluate model performance without trying to hard is to load the output of **model.fit()** into a variable as such
+```python
+history = model.fit((x_train, y_train,batch_size=batch_size,epochs=epochs,verbose=1,validation_data=(x_test, y_test))
+```
+This allow a vizualization plot on the **accuracy loss** and **accuracy** fairly easy with the following code.
+```python
+# summarize history for accuracy
+plt.plot(history.history['acc'])
+plt.plot(history.history['val_acc'])
+plt.title('model accuracy')
+plt.ylabel('accuracy')
+plt.xlabel('epoch')
+plt.legend(['train', 'test'], loc='upper left')
+plt.show()
+
+# summarize history for loss
+plt.plot(history.history['loss'])
+plt.plot(history.history['val_loss'])
+plt.title('model loss')
+plt.ylabel('loss')
+plt.xlabel('epoch')
+plt.legend(['train', 'test'], loc='upper left')
+plt.show()
+```
+This gives the output
+
+
+
+
+
+
+
+
+
 
 
 
