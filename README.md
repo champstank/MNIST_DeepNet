@@ -12,7 +12,7 @@ DeepNet implementing Keras with Theano backend applying GridSearch on MNIST data
 ### Summary of default script and performance evaluation
 Starting with a baseline script that produced a score of 0.983.
 
-```
+```python
 '''Trains a simple convnet on the MNIST dataset for ONLY digits 3 and 8.
 Gets to 98.25% test accuracy after 12 epochs
 (there is still a lot of margin for parameter tuning).
