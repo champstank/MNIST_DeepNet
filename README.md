@@ -27,6 +27,9 @@ from keras.layers import Dense, Dropout, Flatten
 from keras.layers import Conv2D, MaxPooling2D
 from keras import backend as K
 import numpy as np
+import matplotlib 
+import matplotlib.pyplot as plt
+%matplotlib inline
 
 batch_size = 128
 num_classes = 2
@@ -88,7 +91,45 @@ history = model.fit(x_train, y_train,
           epochs=epochs,
           verbose=1,
           validation_data=(x_test, y_test))
-#score = model.evaluate(x_test, y_test, verbose=0)
-#print('Test loss:', score[0])
-#print('Test accuracy:', score[1])
+score = model.evaluate(x_test, y_test, verbose=0)
+print('Test loss:', score[0])
+print('Test accuracy:', score[1])
 ```
+Test loss: 0.0500074749647
+Test accuracy: 0.985922330097
+
+Notice we laoded **model.fit()** into a variable.  This is so we can plot the performace metrics easily.
+
+We can visualize the performace of the model with accuracy loss and accuracy.
+```python
+# summarize history for accuracy
+plt.plot(history.history['acc'])
+plt.plot(history.history['val_acc'])
+plt.title('model accuracy')
+plt.ylabel('accuracy')
+plt.xlabel('epoch')
+plt.legend(['train', 'test'], loc='upper left')
+plt.show()
+# summarize history for loss
+plt.plot(history.history['loss'])
+plt.plot(history.history['val_loss'])
+plt.title('model loss')
+plt.ylabel('loss')
+plt.xlabel('epoch')
+plt.legend(['train', 'test'], loc='upper left')
+plt.show()
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
