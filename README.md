@@ -81,7 +81,7 @@ Next we convert the model into binary classes for classification purposes.
 y_train = keras.utils.to_categorical(y_train, num_classes)
 y_test = keras.utils.to_categorical(y_test, num_classes)
 ```
-Then we set up our model build with type and layers and then compile the model.
+Then we set up our model build with type and layers, then compile the model.
 ```python
 model = Sequential()
 model.add(Conv2D(4, kernel_size=(3, 3),activation='relu',input_shape=input_shape))
