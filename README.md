@@ -254,25 +254,3 @@ plt.show()
 ```
 This gives the output
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
