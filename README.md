@@ -111,6 +111,10 @@ score = model.evaluate(x_test, y_test, verbose=0)
 print('Test loss:', score[0])
 print('Test accuracy:', score[1])
 ```
+Test loss: 0.0500074749647     
+Test accuracy: 0.985922330097 
+
+---
 ## Smoothing the workflow with build model function
 First thing to improve our script we build a function to initialize our Keras model.  This makes it easier to pass parameters from our future parameter tuning techniques.
 ```python
