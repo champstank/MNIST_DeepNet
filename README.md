@@ -81,6 +81,7 @@ We can preview our images to see what the net will see.  To do this we need to u
 plt.imshow(np.squeeze(x_train[0]), cmap='gray')
 ```
 
+<img width="251" alt="seven" src="https://user-images.githubusercontent.com/8240939/26986267-fd769d28-4d03-11e7-9ab8-06cc1e2e8783.png">
 
 
 Next we convert the model into binary classes for classification purposes.
