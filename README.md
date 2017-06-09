@@ -75,6 +75,14 @@ print('x_train shape:', x_train.shape)
 print(x_train.shape[0], 'train samples')
 print(x_test.shape[0], 'test samples')
 ```
+
+We can preview our images to see what the net will see.  To do this we need to use numpy's squeeze() function to reduce the dimensionality of the image for plot to be able to handle.
+```python
+plt.imshow(np.squeeze(x_train[0]), cmap='gray')
+```
+
+
+
 Next we convert the model into binary classes for classification purposes.
 ```python
 # convert class vectors to binary class matrices
