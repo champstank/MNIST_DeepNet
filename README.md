@@ -34,6 +34,7 @@ import matplotlib
 import matplotlib.pyplot as plt
 %matplotlib inline
 ```
+
 Next we initialize some parameters and the MNIST data is loaded and split into train and test samples.
 ```python
 batch_size = 128
@@ -46,6 +47,7 @@ img_rows, img_cols = 28, 28
 # the data, shuffled and split between train and test sets
 (x_train, y_train), (x_test, y_test) = mnist.load_data()
 ```
+
 Here we find only the 2's and 7's.  Then convert the data into a workable type for the model.  This makes it more reasonable to train on a cpu.
 ```python
 #Only look at 2's and 7's
@@ -90,6 +92,7 @@ Next we convert the model into binary classes for classification purposes.
 y_train = keras.utils.to_categorical(y_train, num_classes)
 y_test = keras.utils.to_categorical(y_test, num_classes)
 ```
+
 Then we set up our model build with type and layers, these consist of convolutional and activation layers with hidden layers for dropout.  We then compile the model to initialize it as ready.
 ```python
 model = Sequential()
@@ -106,6 +109,7 @@ model.compile(loss=keras.losses.categorical_crossentropy,
               optimizer=keras.optimizers.Adadelta(),
               metrics=['accuracy'])
 ```
+
 Next we fit the model on the data and load it into a **history** variable to call later for easy plotting of performace to visualize how the model did learning.
 ```python
 history = model.fit(x_train, y_train,
@@ -114,6 +118,7 @@ history = model.fit(x_train, y_train,
           verbose=1,
           validation_data=(x_test, y_test))
 ```
+
 We can print the **accuracy loss** and **accuracy** of the model.
 ```python
 score = model.evaluate(x_test, y_test, verbose=0)
@@ -147,6 +152,7 @@ def create_model():
     
     return model
 ```
+
 We can call this function with the following bit of code.
 ```python
 model = KerasClassifier(build_fn=create_model)
@@ -175,14 +181,17 @@ dropout_rate = [0.25,0.5.9]
 # # of neurons
 neurons = [25,30,35]
 ```
+
 Again, we narrowed these down, searching only two or three at a time.  The goal was to stay under a 1000 fits maximum at a time.  So to execute this approach we only provide the parameters we want to pass through the **param_grid** option of **GridSearchCV** as following.
 ```python
 param_grid = dict(batch_size=batch_size, epochs=epochs, optimizer=optimizer, learn_rate=learn_rate, and so on.......)
 ```
+
 Which ever variables we pass through **GridSearchCV** we also need to pass them into the **create_model** function as such.
 ```python
 def create_model(learn_rate=learn_rate, optimizer=optimizer, and so on.......):
 ```
+
 Once we have found the value we want to use for the variable we can hardcode it into the model creation and don't have to pass it in.
 
 
@@ -190,12 +199,14 @@ Next, to initialize and instantiate **GridSearchCV()** with the **Keras** model 
 ```python
 grid_search = GridSearchCV(model, param_grid=param_grid, n_jobs=-1,verbose=1)
 ```
+
 **n_jobs=-1** runs the job on all cores to speed it up and **verbose=1** prints out how many fits we will be doing.
 
 Then to run exhaustive **GridSearchCV** on parameters evaluate performance of different tunings we do
 ```python
 grid = grid_search.fit(x_train,y_train)
 ```
+
 Now that we have performed these steps we can pull out the best score and our best model with optimal parameter values.
 ```python
 # #best score
@@ -210,6 +221,29 @@ print ('Grid Best Parameters = ' , best_params)
 Grid Score =  0.994518530351    
 Grid Best Parameters =  {'dropout_rate': 0.25, 'learn_rate': 0.002, 'weight_constraint': 3, 'batch_size': 128, 'epochs': 12, 'neurons': 30, 'init_mode': 'lecun_uniform'}
 
+Another approach if we do not want to wait for **GridSearchCV** to do an exhaustive search is to implement **RandomizedSearchCV**.  This method will randomly search the parameters in the provided dictionary and give us scores close to what GridSearchCV usually provides.
+
+```python
+#n_iter must be no higher than the numner of parameters to check
+n_iter = 5
+
+#instatiate and test RandomizedSearch for time and score against GridSearchCV
+rand_search = RandomizedSearchCV(model,param_distributions=param_grid, cv=3, n_iter=n_iter, verbose=1)
+
+#fit RandomizedSearchCV model
+rand = rand_search.fit(x_train,y_train)
+
+#best score
+best_score = rand.best_score_
+#best params
+best_params = rand.best_params_
+
+#print out results
+print ('Randomized Score = ' , best_score)
+print ('Randomized Best Parameters = ' , best_params)
+```
+Randomized Score =  0.993127709767
+Randomized Best Parameters =  {'epochs': 24, 'learn_rate': 0.001, 'optimizer': 'Adagrad', 'batch_size': 128, 'dropout_rate': 0.25, 'weight_constraint': 3}
 
 ## Initializing best parameters in model creation
 Now that we know our best parameters we can code them directly into the **create_model** function.  Notice again we are not passing in any parameters into the model since we are no longer tuning parameters.
@@ -238,10 +272,11 @@ def create_model():
 ```
 
 ## Vizualizing model performance
-An easy way to evaluate model performance without trying to hard is to load the output of **model.fit()** into a variable as such
+An easy way to evaluate model performance without trying to hard is to load the output of **model.fit()** into a variable called **history** as such, we will have to change **epochs** and **batch_size** from a **list** format to an **integer** or the fit will fail. **i.e.** epochs = [12] to epochs = 12 and batch_size = [128] to batch_size = 128
 ```python
 history = model.fit((x_train, y_train,batch_size=batch_size,epochs=epochs,verbose=1,validation_data=(x_test, y_test))
 ```
+
 This allow a vizualization plot on the **accuracy loss** and **accuracy** fairly easy with the following code.
 ```python
 # summarize history for accuracy
@@ -262,5 +297,5 @@ plt.xlabel('epoch')
 plt.legend(['train', 'test'], loc='upper left')
 plt.show()
 ```
-This gives the output
+Calling plot on **history** gives the output
 
