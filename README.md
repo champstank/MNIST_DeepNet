@@ -90,7 +90,7 @@ Next we convert the model into binary classes for classification purposes.
 y_train = keras.utils.to_categorical(y_train, num_classes)
 y_test = keras.utils.to_categorical(y_test, num_classes)
 ```
-Then we set up our model build with type and layers, then compile the model.
+Then we set up our model build with type and layers, these consist of convolutional and activation layers with hidden layers for dropout.  We then compile the model to initialize it as ready.
 ```python
 model = Sequential()
 model.add(Conv2D(4, kernel_size=(3, 3),activation='relu',input_shape=input_shape))
@@ -106,7 +106,7 @@ model.compile(loss=keras.losses.categorical_crossentropy,
               optimizer=keras.optimizers.Adadelta(),
               metrics=['accuracy'])
 ```
-Next we fit the model on the data and load it into a **history** variable for easy plotting of performace to visualize model learning.
+Next we fit the model on the data and load it into a **history** variable to call later for easy plotting of performace to visualize how the model did learning.
 ```python
 history = model.fit(x_train, y_train,
           batch_size=batch_size,
@@ -114,7 +114,7 @@ history = model.fit(x_train, y_train,
           verbose=1,
           validation_data=(x_test, y_test))
 ```
-Then we print the **accuracy loss** and **accuracy** of the model.
+We can print the **accuracy loss** and **accuracy** of the model.
 ```python
 score = model.evaluate(x_test, y_test, verbose=0)
 print('Test loss:', score[0])
@@ -125,7 +125,7 @@ Test accuracy: 0.985922330097
 
 ---
 ## Smoothing the workflow with build model function
-First thing to improve our script we build a function to initialize our Keras model.  This makes it easier to pass parameters from our future parameter tuning techniques.
+First thing to improve our script we build a function to initialize our Keras model.  This makes it easier to pass parameters for our future parameter tuning techniques.
 ```python
 #build Keras model
 def create_model():
@@ -152,7 +152,7 @@ We can call this function with the following bit of code.
 model = KerasClassifier(build_fn=create_model)
 ```
 ##  Tuning parameters with GridSearchCV
-Next we started using **GridSearchCV** to find the optimal parameters for the model.  Since we are working with CPU's we approached this as a coarse pass with less paramters at once.  Meaning the model was not searched as exhaustively since it took to much time on the CPU's.  Everytime we ran it we narrowed the params we had already tuned and added new ones to search.  This approach ended up improving the score consistently above 0.993.
+Next we start using **GridSearchCV** to find the optimal parameters for the model.  Since we are working with CPU's we will approach this as a coarse pass with less paramters at once.  Meaning the model was not searched as exhaustively since it took too much time on the CPU's.  Everytime we ran it we narrowed the parameters down we had already tuned and added new ones to search.  This approach ended up improving the score consistently above 0.993.
 
 A list of parameters we ended up tuning and a range of each were.
 ```python
@@ -179,7 +179,7 @@ Again, we narrowed these down, searching only two or three at a time.  The goal 
 ```python
 param_grid = dict(batch_size=batch_size, epochs=epochs, optimizer=optimizer, learn_rate=learn_rate, and so on.......)
 ```
-What ever variables we pass through **GridSearchCV** we also need to pass them into the **create_model** function as such.
+Which ever variables we pass through **GridSearchCV** we also need to pass them into the **create_model** function as such.
 ```python
 def create_model(learn_rate=learn_rate, optimizer=optimizer, and so on.......):
 ```
