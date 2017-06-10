@@ -360,3 +360,4 @@ for i in range(0,8):
 print('\033[1m' + '2nd Convolutional Layer')
 plt.show()
 ```
+![image](https://user-images.githubusercontent.com/8240939/27005725-b9cd9502-4de1-11e7-91a3-42ee640601db.png)
