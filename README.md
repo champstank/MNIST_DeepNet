@@ -363,7 +363,7 @@ plt.show()
 ![image](https://user-images.githubusercontent.com/8240939/27005725-b9cd9502-4de1-11e7-91a3-42ee640601db.png)
 
 
-If we wanted to see what the average of all the trained images looks like for 2's and 7's we could use some numpy to get that 
+If we wanted to see what the average of all the trained images as a heatmap looks like for 2's and 7's we could use some numpy to get that and visualize it.
 ```python
 #get the average image of all of x_train samples
 x_mean = np.mean(x_train,axis=0)
@@ -375,6 +375,6 @@ x_mean.shape
 x_mean = np.reshape(x_mean,(28,28,1))
 
 #plot x_mean
-plt.imshow(x_mean[:,:,0])
+plt.imshow(x_mean[:,:,0], smap='hot')
 ```
-
+<img width="323" alt="screen shot 2017-06-10 at 2 42 16 pm" src="https://user-images.githubusercontent.com/8240939/27006185-12b7f672-4deb-11e7-835d-5709a2f8374e.png">
