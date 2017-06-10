@@ -85,7 +85,9 @@ print(x_test.shape[0], 'test samples')
 
 We can preview our images to see what the net will see.  To do this we need to use numpy's squeeze() function to reduce the dimensionality of the image for plot to be able to handle them.
 ```python
-plt.imshow(np.squeeze(x_train[0]), cmap='gray')
+for i in range(0,2):
+    plt.subplot(1,3,i+1)
+    plt.imshow(np.squeeze(x_train[i]), cmap='gray')
 ```
 <img width="248" alt="two" src="https://user-images.githubusercontent.com/8240939/26986431-c0fa5bf4-4d04-11e7-8eb5-778163e103f7.png"> | <img width="251" alt="seven" src="https://user-images.githubusercontent.com/8240939/26986267-fd769d28-4d03-11e7-9ab8-06cc1e2e8783.png">
 
