@@ -301,9 +301,12 @@ batch_size = [128] --> batch_size = 128
 ```python
 history = model.fit((x_train, y_train,batch_size=batch_size,epochs=epochs,verbose=1,validation_data=(x_test, y_test))
 ```
+The following is output from running the above command
+
+<img width="977" alt="screen shot 2017-06-10 at 10 49 00 am" src="https://user-images.githubusercontent.com/8240939/27004679-8700bf3a-4dca-11e7-8cd7-cdc9b043ab5e.png">
 
 
-
+**Note:**  You can see from the above our model is predicting with **0.9908% accuracy** when it ends.  We are running lightly with only **12 epochs**.  If we were digging into the model more intensely we would be testing more epochs, batch_size and learning rate configurations against each other for a better score.
 
 This allow a vizualization plot on the **accuracy loss** and **accuracy** fairly easy with the following code.
 ```python
