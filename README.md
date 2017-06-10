@@ -11,8 +11,9 @@ For this exercise, we were given a default script that produced a score of 0.983
 4. Initializing best parameters in model creation.
 5. Vizualizing model performance.
 
-
-### Summary of default script and performance evaluation
+<br></br>
+___
+## Summary of default script and performance evaluation
 
 Starting with a baseline script that produced a score of 0.983.
 
@@ -130,9 +131,8 @@ print('Test accuracy:', score[1])
 Test loss: 0.0500074749647     
 Test accuracy: 0.985922330097 
 
----
-
-
+<br></br>
+___
 ## Smoothing the workflow with build model function
 
 First thing we can do to improve our script is build a function to initialize our Keras model.  This makes it easier to pass parameters for our future parameter tuning techniques.
@@ -163,8 +163,8 @@ We can call this function with the following bit of code.
 ```python
 model = KerasClassifier(build_fn=create_model)
 ```
-
-
+<br></br>
+___
 ##  Tuning parameters with GridSearchCV
 Next we start using **GridSearchCV** to find the optimal parameters for the model.  Since we are working with CPU's we will approach this as a coarse pass with less paramters at once.  Meaning the model was not searched as exhaustively since it took too much time on the CPU's.  Everytime we ran it we narrowed the parameters down we had already tuned and added new ones to search.  This approach ended up improving the score consistently above 0.993.
 
@@ -277,7 +277,8 @@ After running **GridSearchCV** and **RandomizedSearchCV** we can see the differe
 
 Once we have found the values we want to use for the variables we can hardcode them into the model creation and don't have to pass them in any longer.
 
-
+<br></br>
+___
 ## Initializing best parameters in model creation
 Now that we know our best parameters we can code them directly into the **create_model** function.  Notice again we are not passing in any parameters into the model since we are no longer tuning parameters.
 ```python
@@ -303,8 +304,8 @@ def create_model():
     
     return model
 ```
-
-
+<br></br>
+___
 ## Vizualizing model performance
 An easy way to evaluate model performance without trying to hard is to load the output of **model.fit()** into a variable called **history**, we will have to change **epochs** and **batch_size** from a **list** format to an **integer** or the fit will fail. We pass **x_test** and **y_test** into the function through the **validation_data** parameter.
 **i.e.** 
@@ -360,7 +361,7 @@ Calling plot on **history** gives will show us our model performace in the follo
 
 **Note:**  You can see from the above our model is predicting with **0.9908% accuracy** when it ends and is not converging.  We are running lightly with only **12 epochs**.  If we were digging into the model more intensely we would be testing more epochs, batch_size and learning rate configurations against each other for a better score and would see the model converge.
 
-
+<br></br>
 To see what the two **Convolutional Layers** are seeing we can print out the **weights** of each layer and get a feel for what the model is giving value to in each image. 
 
 To plot and view the weights of the first layer we run the following bit of code
