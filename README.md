@@ -14,7 +14,7 @@ For this exercise, we were given a default script that produced a score of 0.983
 
 <br></br>
 ___
-## Summary of default script and performance evaluation
+## <font color="red">1.</font> Summary of default script and performance evaluation
 
 Starting with a baseline script that produced a score of 0.983.
 
