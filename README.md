@@ -10,6 +10,7 @@ For this exercise, we were given a default script that produced a score of 0.983
 3. Tuning parameters with GridSearchCV.
 4. Initializing best parameters in model creation.
 5. Vizualizing model performance.
+6. Resources
 
 <br></br>
 ___
@@ -415,3 +416,13 @@ x_mean = np.reshape(x_mean,(28,28,1))
 plt.imshow(x_mean[:,:,0], smap='hot')
 ```
 <img width="323" alt="screen shot 2017-06-10 at 2 42 16 pm" src="https://user-images.githubusercontent.com/8240939/27006185-12b7f672-4deb-11e7-835d-5709a2f8374e.png">
+
+<br></br>
+## Resources
+  *[How to Grid Search Hyperparameters for Deep Learning Models in Python With Keras](http://machinelearningmastery.com/grid-search-hyperparameters-deep-learning-models-python-keras/)
+  *[Keras Home Page](https://keras.io/)
+  *[Display Deep Learning Model Training History in Keras](http://machinelearningmastery.com/display-deep-learning-model-training-history-in-keras/)
+  *[Understanding and visualizing convolutional neural networks](https://cs231n.github.io/understanding-cnn/)
+  *[How convolutional neural networks see the world](https://blog.keras.io/how-convolutional-neural-networks-see-the-world.html)
+  *[Visualizing parts of Convolutional Neural Networks using Keras and Cats](https://hackernoon.com/visualizing-parts-of-convolutional-neural-networks-using-keras-and-cats-5cc01b214e59)
+  *[Keras Visualization Toolkit](https://raghakot.github.io/keras-vis/)
