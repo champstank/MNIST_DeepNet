@@ -112,11 +112,7 @@ model.compile(loss=keras.losses.categorical_crossentropy,
 
 Next we fit the model on the data and load it into a **history** variable to call later for easy plotting of performace to visualize how the model did learning.
 ```python
-history = model.fit(x_train, y_train,
-          batch_size=batch_size,
-          epochs=epochs,
-          verbose=1,
-          validation_data=(x_test, y_test))
+model.fit(x_train, y_train, batch_size=batch_size, epochs=epochs, verbose=1, validation_data=(x_test, y_test))
 ```
 
 We can print the **accuracy loss** and **accuracy** of the model.
@@ -130,7 +126,7 @@ Test accuracy: 0.985922330097
 
 ---
 ## Smoothing the workflow with build model function
-First thing to improve our script we build a function to initialize our Keras model.  This makes it easier to pass parameters for our future parameter tuning techniques.
+First thing we can do to improve our script is build a function to initialize our Keras model.  This makes it easier to pass parameters for our future parameter tuning techniques.
 ```python
 #build Keras model
 def create_model():
@@ -306,8 +302,6 @@ The following is output from running the above command
 <img width="977" alt="screen shot 2017-06-10 at 10 49 00 am" src="https://user-images.githubusercontent.com/8240939/27004679-8700bf3a-4dca-11e7-8cd7-cdc9b043ab5e.png">
 
 
-**Note:**  You can see from the above our model is predicting with **0.9908% accuracy** when it ends.  We are running lightly with only **12 epochs**.  If we were digging into the model more intensely we would be testing more epochs, batch_size and learning rate configurations against each other for a better score.
-
 This allow a vizualization plot on the **accuracy loss** and **accuracy** fairly easy with the following code.
 ```python
 # summarize history for accuracy
@@ -328,5 +322,25 @@ plt.xlabel('epoch')
 plt.legend(['train', 'test'], loc='upper left')
 plt.show()
 ```
-Calling plot on **history** gives us the following output
+Calling plot on **history** gives will show us our model performace in the following output
 
+<img width="424" alt="screen shot 2017-06-10 at 11 32 40 am" src="https://user-images.githubusercontent.com/8240939/27004950-91917736-4dd0-11e7-94af-bf034f196c1f.png">
+
+**Note:**  You can see from the above our model is predicting with **0.9908% accuracy** when it ends and is not converging.  We are running lightly with only **12 epochs**.  If we were digging into the model more intensely we would be testing more epochs, batch_size and learning rate configurations against each other for a better score and would see the model converge.
+
+
+To see what the two **Convolutional Layers** are seeing we can print out the **weights** of each layer and get a feel for what the model is giving value to in each image. 
+
+To plot and view the weights of the first layer we run the following bit of code
+```python
+weight = model.model.layers[0].get_weights()[0][:,:,0,:]
+plt.figure(1, figsize=(25,15))
+
+for i in range(0,4):
+    plt.subplot(1,8,i+1)
+    plt.title('Filter #' + str(i+1))
+    plt.imshow(weight[:,:,i],interpolation="nearest",cmap="gray")
+
+print('\033[1m' + '1st Convolutional Layer')
+plt.show()
+```
