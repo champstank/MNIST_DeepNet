@@ -362,7 +362,7 @@ Calling plot on **history** gives will show us our model performace in the follo
 **Note:**  You can see from the above our model is predicting with **0.9908% accuracy** when it ends and is not converging.  We are running lightly with only **12 epochs**.  If we were digging into the model more intensely we would be testing more epochs, batch_size and learning rate configurations against each other for a better score and would see the model converge.
 
 <br></br>
-To see what the two **Convolutional Layers** are seeing we can print out the **weights** of each layer and get a feel for what the model is giving value to in each image. 
+To see what the two **Convolutional Layers** are seeing we can print out the **weights** of each layer and get a feel for what the model is giving value to in the images. The darker the spot the more weight the model is giving those locations to determine image class.
 
 To plot and view the weights of the first layer we run the following bit of code
 ```python
@@ -396,14 +396,16 @@ plt.show()
 ![image](https://user-images.githubusercontent.com/8240939/27005725-b9cd9502-4de1-11e7-91a3-42ee640601db.png)
 
 
-If we wanted to see what the average of all the trained images as a heatmap looks like for 2's and 7's we could use some numpy to get that and visualize it.
+If we wanted to see what the average of all the trained images looks like as a heatmap for 2's and 7's we could use some numpy to get that and visualize it.
 ```python
 #get the average image of all of x_train samples
 x_mean = np.mean(x_train,axis=0)
 
 #print out shape of x_mean
 x_mean.shape
-
+```
+(1,28,28)
+```python
 #reshape x_mean for plotting
 x_mean = np.reshape(x_mean,(28,28,1))
 
