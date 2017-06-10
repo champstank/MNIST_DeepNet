@@ -361,3 +361,20 @@ print('\033[1m' + '2nd Convolutional Layer')
 plt.show()
 ```
 ![image](https://user-images.githubusercontent.com/8240939/27005725-b9cd9502-4de1-11e7-91a3-42ee640601db.png)
+
+
+If we wanted to see what the average of all the trained images looks like for 2's and 7's we could use some numpy to get that 
+```python
+#get the average image of all of x_train samples
+x_mean = np.mean(x_train,axis=0)
+
+#print out shape of x_mean
+x_mean.shape
+
+#reshape x_mean for plotting
+x_mean = np.reshape(x_mean,(28,28,1))
+
+#plot x_mean
+plt.imshow(x_mean[:,:,0])
+```
+
