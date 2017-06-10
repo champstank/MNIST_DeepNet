@@ -344,3 +344,19 @@ for i in range(0,4):
 print('\033[1m' + '1st Convolutional Layer')
 plt.show()
 ```
+![image](https://user-images.githubusercontent.com/8240939/27005717-5d7cb2e2-4de1-11e7-9e78-b6513af92a18.png)
+
+
+To plot and view the weights of the second layer we just change the index of **model.model.layers[0]** to **model.model.layers[1]**
+```python
+weight = model.model.layers[1].get_weights()[0][:,:,0,:]
+plt.figure(1, figsize=(25,15))
+
+for i in range(0,8):
+    plt.subplot(1,8,i+1)
+    plt.title('Filter #' + str(i+1))
+    plt.imshow(weight[:,:,i],interpolation="nearest",cmap="gray")
+
+print('\033[1m' + '2nd Convolutional Layer')
+plt.show()
+```
