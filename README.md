@@ -78,7 +78,7 @@ print(x_train.shape[0], 'train samples')
 print(x_test.shape[0], 'test samples')
 ```
 
-We can preview our images to see what the net will see.  To do this we need to use numpy's squeeze() function to reduce the dimensionality of the image for plot to be able to handle.
+We can preview our images to see what the net will see.  To do this we need to use numpy's squeeze() function to reduce the dimensionality of the image for plot to be able to handle them.
 ```python
 plt.imshow(np.squeeze(x_train[0]), cmap='gray')
 ```
@@ -169,30 +169,46 @@ epochs = 12
 #optimizers
 optimizer = ['SGD', 'RMSprop', 'Adagrad', 'Adadelta', 'Adam', 'Adamax', 'Nadam']
 #learning rate
-learn_rate = [0.001, 0.01, 0.1]
+#learn_rate = [0.001, 0.01, 0.1]
 #activation for first layer
 activation = ['softmax', 'softplus', 'softsign', 'relu', 'tanh', 'sigmoid', 'hard_sigmoid', 'linear']
 #initializer 
-init_mode = ['uniform', 'lecun_uniform', 'normal', 'zero', 'glorot_normal', 'glorot_uniform', 'he_normal', 'he_uniform']
+#init_mode = ['uniform', 'lecun_uniform', 'normal', 'zero', 'glorot_normal', 'glorot_uniform', 'he_normal', 'he_uniform']
 #weight
-weight_constraint = [1, 3, 5]
+#weight_constraint = [1, 3, 5]
 #dropout percent
-dropout_rate = [0.25,0.5.9]
+#dropout_rate = [0.25,0.5.9]
 # # of neurons
-neurons = [25,30,35]
+neurons = [25,30,35,75,125]
 ```
 
-Again, we narrowed these down, searching only two or three at a time.  The goal was to stay under a 1000 fits maximum at a time.  So to execute this approach we only provide the parameters we want to pass through the **param_grid** option of **GridSearchCV** as following.
+Again, we narrowed these down, searching only two or three at a time with the others not used commented out.  The goal was to stay under a 1000 fits maximum at a time.  So to execute this approach we only provide the parameters we want to pass through the **param_grid** option of **GridSearchCV** as following.  If we wanted to tune **batch_size, epochs, optimizer, neurons and activation** we would pass them as such
 ```python
-param_grid = dict(batch_size=batch_size, epochs=epochs, optimizer=optimizer, learn_rate=learn_rate, and so on.......)
+param_grid = dict(batch_size=batch_size, epochs=epochs, optimizer=optimizer, neurons=neurons, activation=activation)
 ```
 
-Which ever variables we pass through **GridSearchCV** we also need to pass them into the **create_model** function as such.
+Which ever variables we pass through **GridSearchCV** we also need to pass them into the **create_model** function build. We do not need to pass **batch_size and epochs** though.  If we were using the above parameters we would pass and intialize them like this
 ```python
-def create_model(learn_rate=learn_rate, optimizer=optimizer, and so on.......):
+def create_model(learn_rate=learn_rate, optimizer=optimizer, neurons=neurons, activation=activation):
+    #create model
+    model = Sequential()
+    model.add(Conv2D(4, kernel_size=(3, 3),activation=activation,input_shape=input_shape))
+    model.add(Conv2D(8, (3, 3), activation=activation))
+    model.add(MaxPooling2D(pool_size=(2, 2)))
+    model.add(Dropout(0.25))
+    model.add(Flatten())
+    model.add(Dense(neurons, activation=activation))
+    model.add(Dropout(0.5))
+    model.add(Dense(2, activation='softmax'))
+    
+    #compile model
+    model.compile(loss=keras.losses.categorical_crossentropy,
+              optimizer=optimizer,
+              metrics=['accuracy'])
+    
+    return model
 ```
-
-Once we have found the value we want to use for the variable we can hardcode it into the model creation and don't have to pass it in.
+Notice above we did not pass the **activation** parameter to the last layer.  This layer requires a **sigmoid** activation for the purposes of the problem being binary classification.
 
 
 Next, to initialize and instantiate **GridSearchCV()** with the **Keras** model we do the following.
@@ -245,6 +261,11 @@ print ('Randomized Best Parameters = ' , best_params)
 Randomized Score =  0.993127709767
 Randomized Best Parameters =  {'epochs': 24, 'learn_rate': 0.001, 'optimizer': 'Adagrad', 'batch_size': 128, 'dropout_rate': 0.25, 'weight_constraint': 3}
 
+After running **GridSearchCV** and **RandomizedSearchCV** we can see the difference in performance is minimal. **GridSearchCV** does give us an edge as we would expect since it performs its search exhaustively, but **RandomizedSearchCV** gives us a score close to the same.
+
+
+Once we have found the values we want to use for the variables we can hardcode them into the model creation and don't have to pass them in any longer.
+
 ## Initializing best parameters in model creation
 Now that we know our best parameters we can code them directly into the **create_model** function.  Notice again we are not passing in any parameters into the model since we are no longer tuning parameters.
 ```python
@@ -256,12 +277,12 @@ def create_model():
     model.add(MaxPooling2D(pool_size=(2, 2)))
     model.add(Dropout(0.25))
     model.add(Flatten())
-    model.add(Dense(25, kernel_initializer='lecun_uniform', activation='linear', kernel_constraint=maxnorm(3))) 
+    model.add(Dense(30, kernel_initializer='lecun_uniform', activation='linear', kernel_constraint=maxnorm(3))) 
     model.add(Dropout(0.5))
     model.add(Dense(2, kernel_initializer='lecun_uniform', activation='softmax'))
     
     #initialize optimizer
-    nadam = Nadam()
+    nadam = Nadam(lr=0.002)
     
     #compile model
     model.compile(loss=keras.losses.categorical_crossentropy,
@@ -271,11 +292,18 @@ def create_model():
     return model
 ```
 
+
 ## Vizualizing model performance
-An easy way to evaluate model performance without trying to hard is to load the output of **model.fit()** into a variable called **history** as such, we will have to change **epochs** and **batch_size** from a **list** format to an **integer** or the fit will fail. **i.e.** epochs = [12] to epochs = 12 and batch_size = [128] to batch_size = 128
+An easy way to evaluate model performance without trying to hard is to load the output of **model.fit()** into a variable called **history**, we will have to change **epochs** and **batch_size** from a **list** format to an **integer** or the fit will fail. We pass **x_test** and **y_test** into the function through the **validation_data** parameter.
+**i.e.** 
+epochs = [12]      --> epochs = 12    
+batch_size = [128] --> batch_size = 128
 ```python
 history = model.fit((x_train, y_train,batch_size=batch_size,epochs=epochs,verbose=1,validation_data=(x_test, y_test))
 ```
+
+
+
 
 This allow a vizualization plot on the **accuracy loss** and **accuracy** fairly easy with the following code.
 ```python
@@ -297,5 +325,5 @@ plt.xlabel('epoch')
 plt.legend(['train', 'test'], loc='upper left')
 plt.show()
 ```
-Calling plot on **history** gives the output
+Calling plot on **history** gives us the following output
 
