@@ -14,7 +14,7 @@ For this exercise, we were given a default script that produced a score of 0.983
 
 <br></br>
 ___
-## <font color="red">1.</font> Summary of default script and performance evaluation
+## 1.) Summary of default script and performance evaluation
 
 Starting with a baseline script that produced a score of 0.983.
 
@@ -136,7 +136,7 @@ Test accuracy: 0.985922330097
 
 <br></br>
 ___
-## Smoothing the workflow with build model function
+## 2.) Smoothing the workflow with build model function
 
 First thing we can do to improve our script is build a function to initialize our Keras model.  This makes it easier to pass parameters for our future parameter tuning techniques.
 ```python
@@ -168,7 +168,7 @@ model = KerasClassifier(build_fn=create_model)
 ```
 <br></br>
 ___
-##  Tuning parameters with GridSearchCV
+##  3.) Tuning parameters with GridSearchCV
 Next we start using **GridSearchCV** to find the optimal parameters for the model.  Since we are working with CPU's we will approach this as a coarse pass with less paramters at once.  Meaning the model was not searched as exhaustively since it took too much time on the CPU's.  Everytime we ran it we narrowed the parameters down we had already tuned and added new ones to search.  This approach ended up improving the score consistently above 0.993.
 
 A list of parameters we ended up tuning and a range of each were.
@@ -282,7 +282,7 @@ Once we have found the values we want to use for the variables we can hardcode t
 
 <br></br>
 ___
-## Initializing best parameters in model creation
+## 4.) Initializing best parameters in model creation
 Now that we know our best parameters we can code them directly into the **create_model** function.  Notice again we are not passing in any parameters into the model since we are no longer tuning parameters.
 ```python
 def create_model():
@@ -309,7 +309,7 @@ def create_model():
 ```
 <br></br>
 ___
-## Vizualizing model performance
+## 5.) Vizualizing model performance
 An easy way to evaluate model performance without trying to hard is to load the output of **model.fit()** into a variable called **history**, we will have to change **epochs** and **batch_size** from a **list** format to an **integer** or the fit will fail. We pass **x_test** and **y_test** into the function through the **validation_data** parameter.
 **i.e.** 
 epochs = [12]      --> epochs = 12    
@@ -418,11 +418,11 @@ plt.imshow(x_mean[:,:,0], smap='hot')
 <img width="323" alt="screen shot 2017-06-10 at 2 42 16 pm" src="https://user-images.githubusercontent.com/8240939/27006185-12b7f672-4deb-11e7-835d-5709a2f8374e.png">
 
 <br></br>
-## Resources
-  *[How to Grid Search Hyperparameters for Deep Learning Models in Python With Keras](http://machinelearningmastery.com/grid-search-hyperparameters-deep-learning-models-python-keras/)
-  *[Keras Home Page](https://keras.io/)
-  *[Display Deep Learning Model Training History in Keras](http://machinelearningmastery.com/display-deep-learning-model-training-history-in-keras/)
-  *[Understanding and visualizing convolutional neural networks](https://cs231n.github.io/understanding-cnn/)
-  *[How convolutional neural networks see the world](https://blog.keras.io/how-convolutional-neural-networks-see-the-world.html)
-  *[Visualizing parts of Convolutional Neural Networks using Keras and Cats](https://hackernoon.com/visualizing-parts-of-convolutional-neural-networks-using-keras-and-cats-5cc01b214e59)
+## 6.) Resources
+  *[How to Grid Search Hyperparameters for Deep Learning Models in Python With Keras](http://machinelearningmastery.com/grid-search-hyperparameters-deep-learning-models-python-keras/) <br></br>
+  *[Keras Home Page](https://keras.io/) <br></br>
+  *[Display Deep Learning Model Training History in Keras](http://machinelearningmastery.com/display-deep-learning-model-training-history-in-keras/) <br></br>
+  *[Understanding and visualizing convolutional neural networks](https://cs231n.github.io/understanding-cnn/) <br></br>
+  *[How convolutional neural networks see the world](https://blog.keras.io/how-convolutional-neural-networks-see-the-world.html) <br></br>
+  *[Visualizing parts of Convolutional Neural Networks using Keras and Cats](https://hackernoon.com/visualizing-parts-of-convolutional-neural-networks-using-keras-and-cats-5cc01b214e59) <br></br>
   *[Keras Visualization Toolkit](https://raghakot.github.io/keras-vis/)
