@@ -320,22 +320,38 @@ The following is output from running the above command
 
 This allows a vizualization plot on the **accuracy loss** and **accuracy** fairly easy with the following code.
 ```python
-# summarize history for accuracy
-plt.plot(history.history['acc'])
-plt.plot(history.history['val_acc'])
-plt.title('model accuracy')
-plt.ylabel('accuracy')
-plt.xlabel('epoch')
-plt.legend(['train', 'test'], loc='upper left')
-plt.show()
+#custom line colors
+color_acc = '#FC07EE'
+color_acc2 = '#9C1794'
+color_val = '#03DFDB'
+color_val2 = '#0497DC'
+x = np.arange(0, 12, 1)
+y1 = history.history['acc']
+y2 = history.history['val_acc']
+y3 = history.history['loss']
+y4 = history.history['val_loss']
 
-# summarize history for loss
-plt.plot(history.history['loss'])
-plt.plot(history.history['val_loss'])
-plt.title('model loss')
-plt.ylabel('loss')
-plt.xlabel('epoch')
-plt.legend(['train', 'test'], loc='upper left')
+fig, ax1 = plt.subplots()
+
+ax2 = ax1.twinx()
+ax1.plot(x, y1, color_acc)
+ax1.plot(x, y2, color_acc2)
+ax2.plot(x, y3, color_val)
+ax2.plot(x, y4, color_val2)
+
+ax1.set_xlabel('epochs')
+ax1.set_ylabel('accuracy', color='m')
+ax2.set_ylabel('loss', color='b')
+
+ax1.tick_params(colors='m')
+ax2.tick_params(colors='b')
+ax1.grid(False)
+ax2.grid(False)
+
+plt.title('Accuracy and Loss')
+plt.legend(['train_loss', 'test_loss'], loc='upper left')
+plt.legend(['train_acc', 'test_acc'], loc='lower left')
+fig.tight_layout()
 plt.show()
 ```
 Calling plot on **history** gives will show us our model performace in the following output
