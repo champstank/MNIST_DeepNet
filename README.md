@@ -356,7 +356,7 @@ plt.show()
 ```
 Calling plot on **history** gives will show us our model performace in the following output
 
-<img width="424" alt="screen shot 2017-06-10 at 11 32 40 am" src="https://user-images.githubusercontent.com/8240939/27004950-91917736-4dd0-11e7-94af-bf034f196c1f.png">
+<img width="562" alt="screen shot 2017-06-10 at 3 05 49 pm" src="https://user-images.githubusercontent.com/8240939/27006332-9f5b0fe4-4dee-11e7-8c62-f9f221bbac68.png">
 
 **Note:**  You can see from the above our model is predicting with **0.9908% accuracy** when it ends and is not converging.  We are running lightly with only **12 epochs**.  If we were digging into the model more intensely we would be testing more epochs, batch_size and learning rate configurations against each other for a better score and would see the model converge.
 
